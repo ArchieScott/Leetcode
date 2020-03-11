@@ -23,6 +23,9 @@
 如果相同则跳过这次循环, 不同时才返回结果.
 */
 
+#include <vector>
+#include <unordered_map>
+
 class Solution {
 public:
     std::vector<int> twoSum(std::vector<int>& nums, int target) {
