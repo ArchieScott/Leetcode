@@ -62,13 +62,14 @@ public:
         int j = halfLen - i;
         while (leftPart < rightPart) {
             // 因为 nums1 有序, leftPart 一定小于 rightPart, 因此只需要比较 nums2 的 leftPart 与 nums1 的 rightPart
-            // nums2 leftPart 中最大的数比 nums1 rightPart 最小的数要大, 此时需要减小 j, 增大 i
+            // nums2 leftPart 中最大的数比 nums1 rightPart 最小的数要大, 此时需要减小 j, 增大 i, leftPart 左边界右移
             if (i < rightPart && nums2[j - 1] > nums1[i]) {
                 leftPart = i + 1;
             }
-            // i 划分多了, 此时需要减小 i, 增大 j
-            else if (i > leftPart && nums1[i - 1] > nums2[j]) {
-                rightPart = i - 1;
+            // 其他情况都减小 rightPart, nums1[i - 1] >= nums2[j]
+            // i 划分多了, 此时需要减小 i, 增大 j, rightPart 右边界左移
+            else {
+                rightPart = i;
             }
             // 修改了 leftPart 或者 rightPart 后需要更新划分点
             i = leftPart + (rightPart - leftPart) / 2;
