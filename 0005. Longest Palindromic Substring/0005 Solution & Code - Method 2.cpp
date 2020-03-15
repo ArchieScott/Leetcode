@@ -25,7 +25,9 @@ Manacher 算法, 能够在 O(n) 时间复杂度内找到最长回文子串.
 首先当前字符一定是相对于此时最大回文半径的 center 对称的, 因此 radius[i] 的值应该至少等于 radius[2 * center - i]
 上面这种情况对应这整个以 i 为中心的回文串都在 center - pR 这个回文串的内部
 但是如果 radius[2 * center - i] > pR - i, 说明此时的 i 的镜像点 i' 的回文半径左边界超过了 center - pR 的左边界
-这样按照 center 镜像时我们只能保证 i ~ pR 这一段属于回文半径的一部分, 剩下的还需要继续向外扩才能判断
+这样按照 center 镜像时我们只能保证 i ~ pR 这一段属于回文半径的一部分, 剩下的还需要继续向外扩才能判断.
+每次更新 center 的时候我们都要检查最长回文字符串的长度是否有变化, 如果有变化需要更新 start 和 end,
+注意 start 和 end 分别是添加了 '#' 字符后最长回文串能够到达的首部和尾部, 最后输出结果时需要将 start 和 end 都除以 2.
 */
 
 #include <string>
@@ -47,7 +49,7 @@ public:
             // 用于确定不需要检验回文的区域
             radius[i] = pR > i ? std::min(radius[2 * center - i], pR - i) : 1;
 
-            while (i + radius[i] < str.size() && i - radius[i] > 1) {
+            while (i + radius[i] < str.size() && i - radius[i] > -1) {
                 if (str[i + radius[i]] == str[i - radius[i]]) {
                     radius[i]++;
                 }
@@ -60,11 +62,11 @@ public:
                 center = i;
             }
             if (end - start < 2 * radius[i] - 1) {
-                start = i - radius[i];
-                end = i + radius[i];
+                start = i - radius[i] + 1;
+                end = i + radius[i] - 1;
             }
         }
-        return s.substr(start / 2, (end - start + 1) / 2);
+        return s.substr(start / 2, (end - start) / 2);
     }
 
 private:
